@@ -82,37 +82,37 @@ class WDV_MailChimp_Ajax extends WP_Widget {
                 
         if( ($titletextcolor) ) { ?>
             <style>
-                .widget_wdv_mailchimp_ajax .widget-title {color:<?php echo $titletextcolor;?>;  border-color: <?php echo $titletextcolor;?>;}
+                .widget_wdv_mailchimp_ajax .widget-title {color:<?php echo $titletextcolor. '!important';?>;  border-color: <?php echo $titletextcolor. '!important';?>;}
             </style>
         <?php 
 	}
         if( ($descriptiontextcolor) ) { ?>
             <style>
-                .widget_wdv_mailchimp_ajax .subscribe-description {color:<?php echo $descriptiontextcolor;?>;}
+                .widget_wdv_mailchimp_ajax .subscribe-description {color:<?php echo $descriptiontextcolor. '!important';?>;}
             </style>
         <?php 
 	}
         if( ($buttonbgcolor) ) { ?>
             <style>  
             .widget_wdv_mailchimp_ajax input[type="button"], .widget_wdv_mailchimp_ajax input[type="button"]:focus
-            {background: <?php echo $buttonbgcolor;?>;border-color:<?php echo $buttonbgcolor;?>;}
+            {background: <?php echo $buttonbgcolor. '!important';?>;border-color:<?php echo $buttonbgcolor. '!important';?>;}
             .widget_wdv_mailchimp_ajax input[type="button"]:hover
-            {background: <?php echo $buttonbgcolor;?>; border-color:<?php echo $buttonbgcolor;?>; opacity: 0.8;}
+            {background: <?php echo $buttonbgcolor. '!important';?>; border-color:<?php echo $buttonbgcolor. '!important';?>; opacity: 0.8 !important;}
             </style>
         <?php 
 	}
         if( ($buttontextcolor) ) { ?>
             <style>  
             .widget_wdv_mailchimp_ajax input[type="button"], .widget_wdv_mailchimp_ajax input[type="button"]:focus
-            {color:<?php echo $buttontextcolor;?>;}
+            {color:<?php echo $buttontextcolor . '!important';?>;}
             .widget_wdv_mailchimp_ajax input[type="button"]:hover
-            {color:<?php echo $buttontextcolor;?>;}
+            {color:<?php echo $buttontextcolor . '!important';?>;}
             </style>
         <?php 
 	}
         if( ($bgcolor) ) { ?>
         <style>
-            .widget_wdv_mailchimp_ajax {background: <?php echo $bgcolor;?>;padding: <?php echo $padding.'px';?>;}
+            .widget_wdv_mailchimp_ajax {background: <?php echo $bgcolor . '!important';?>;padding: <?php echo $padding.'px !important';?>;}
         </style>
         <?php 
 	}
@@ -264,6 +264,7 @@ class WDV_MailChimp_Ajax extends WP_Widget {
         $instance['padding'] = ( ! empty( $new_instance['padding'] ) ) ? strip_tags( $new_instance['padding'] ) : '';            
         $instance['buttonbgcolor']     = strip_tags($new_instance['buttonbgcolor']);
         $instance['buttontextcolor']     = strip_tags($new_instance['buttontextcolor']);
+        $instance['descriptiontextcolor']     = strip_tags($new_instance['descriptiontextcolor']);
         $instance['bgcolor']      = strip_tags( $new_instance['bgcolor'] );
         $instance['padding'] = ( ! empty( $new_instance['padding'] ) ) ? strip_tags( $new_instance['padding'] ) : '';            
         $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
