@@ -30,7 +30,7 @@ If you find any bugs or have any ideas, please mail me.
 How find api key?
 <a href="http://doc.wdvillage.com/docs/wdv-mailchimp-ajax/faq/how-find-api-key" rel="nofollow">How find api key?</a>
 
-How find list ID?
+How find  Audience ID?
 <a href="http://doc.wdvillage.com/docs/wdv-mailchimp-ajax/faq/how-find-list-id" rel="nofollow">How find list ID?</a>
 
 Documentation
