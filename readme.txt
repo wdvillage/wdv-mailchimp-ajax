@@ -31,7 +31,7 @@ How find api key?
 <a href="http://doc.wdvillage.com/docs/wdv-mailchimp-ajax/faq/how-find-api-key" rel="nofollow">How find api key?</a>
 
 How find  Audience ID?
-<a href="http://doc.wdvillage.com/docs/wdv-mailchimp-ajax/faq/how-find-list-id" rel="nofollow">How find list ID?</a>
+<a href="http://doc.wdvillage.com/docs/wdv-mailchimp-ajax/faq/how-find-list-id" rel="nofollow">How find Audience ID?</a>
 
 Documentation
 <a href="http://doc.wdvillage.com/docs/wdv-mailchimp-ajax/" rel="nofollow">Documentation</a>
