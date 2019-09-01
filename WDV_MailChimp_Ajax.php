@@ -9,26 +9,33 @@ class WDV_MailChimp_Ajax extends WP_Widget {
     /**
     * Register widget with WordPress.
     */    
+    var $textdomain;
     
     public function __construct() {
 
         $widget_ops = array(
             'classname'   => 'widget_wdv_mailchimp_ajax', 
-            'description' => __( 'Subscribe to our news', 'wdv_mailchimp_ajax_widget' ));
+            'description' => __( 'Subscribe to our news', 'wdv-mailchimp-ajax-widget' ));
        
-         parent::__construct( 'wdv_mailchimp_ajax', __( 'WDV: Subscribe mailchimp', 'wdv_mailchimp_ajax_widget' ), $widget_ops );
-         
-         
-        if ( is_active_widget(false, false, $this->id_base) )
-        {add_action( 'wp_head', array(&$this, 'add_styles_and_scripts') );}
-         
+         parent::__construct( 'wdv_mailchimp_ajax', __( 'WDV: Subscribe mailchimp', 'wdv-mailchimp-ajax-widget' ), $widget_ops );
+    
+         add_action( 'init', array( $this , 'load_text_domain' ) );
+         add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue_scripts' ) );
     }
-       
-    function add_styles_and_scripts(){
-        wp_enqueue_style( 'wp-color-picker' );        
-        wp_enqueue_script( 'wp-color-picker' ); 
-        wp_enqueue_script('underscore');
-} 
+    
+    function load_text_domain() {
+	load_plugin_textdomain( 'wdv-mailchimp-ajax-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );                        
+    }
+
+    function admin_enqueue_scripts ( $hook_suffix )
+        {
+            if ( $hook_suffix != 'widgets.php' ) { return;}
+
+            wp_enqueue_style( 'wp-color-picker' );          
+            wp_enqueue_script( 'wp-color-picker' );
+            wp_enqueue_script('underscore');
+        }
+    
     /**
     * Front-end display of widget.
     *
@@ -39,18 +46,19 @@ class WDV_MailChimp_Ajax extends WP_Widget {
     */
     public function widget( $args, $instance )
     {
-        
+
         $titletextcolor = isset( $instance['titletextcolor'] ) ? esc_attr( $instance['titletextcolor'] ) : '';
         $descriptiontextcolor      = isset( $instance['descriptiontextcolor'] ) ? esc_attr( $instance['descriptiontextcolor'] ) : '';
         $buttonbgcolor      = isset( $instance['buttonbgcolor'] ) ? esc_attr( $instance['buttonbgcolor'] ) : '';
         $buttontextcolor      = isset( $instance['buttontextcolor'] ) ? esc_attr( $instance['buttontextcolor'] ) : '';
         $bgcolor      = isset( $instance['bgcolor'] ) ? esc_attr( $instance['bgcolor'] ) : '';
         $padding      = isset( $instance['padding'] ) ? esc_attr( $instance['padding'] ) : '';
-        $title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Subscribe', 'wdv_mailchimp_ajax_widget' );
+        $title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Subscribe', 'wdv-mailchimp-ajax-widget' );
 	$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
 	$description   = isset( $instance['description'] ) ? esc_attr( $instance['description'] ) : '';
+        $placeholder = isset( $instance['placeholder'] ) ? esc_attr( $instance['placeholder'] ) : 'name@mail.com';
         //$buttontext   = isset( $instance['buttontext'] ) ? esc_attr( $instance['buttontext'] ) : 'Subscribe';
-        $buttontext = ( ! empty( $instance['buttontext'] ) ) ? $instance['buttontext'] : __( 'Subscribe', 'wdv_mailchimp_ajax_widget' );
+        $buttontext = ( ! empty( $instance['buttontext'] ) ) ? $instance['buttontext'] : __( 'Subscribe', 'wdv-mailchimp-ajax-widget' );
         $listID   = isset( $instance['listID'] ) ? esc_attr( $instance['listID'] ) : '';
 	$apiKey   = isset( $instance['apiKey'] ) ? esc_attr( $instance['apiKey'] ) : '';
 
@@ -72,9 +80,10 @@ class WDV_MailChimp_Ajax extends WP_Widget {
 	}
         
         echo '<form method="post" class="subscribe_mc">';
-        echo       '<input type="email" value="" name="email" class="email" id="email" placeholder="name@email.com" required>';
+        echo       '<input type="email" value="" name="email" class="email" id="email" placeholder="' .$placeholder . '" required>';
         ?>
-        <input type="button" value='<?php if ($buttontext){echo $buttontext;} ?>' name="subscribe" id="mc-embedded-subscribe" class="button" >   
+        
+        <input type="button" value='<?php if ($buttontext){echo esc_attr($buttontext);} ?>' name="subscribe" id="mc-embedded-subscribe" class="button" >   
         <?php
         echo  '</form>
                 <div class="result"></div>';                         
@@ -135,6 +144,7 @@ class WDV_MailChimp_Ajax extends WP_Widget {
         $padding = ! empty( $instance['padding'] ) ? $instance['padding'] : '0';
         $title = ! empty( $instance['title'] ) ? $instance['title'] : '';
         $description = ! empty( $instance['description'] ) ? $instance['description'] : '';
+        $placeholder = ! empty( $instance['placeholder'] ) ? $instance['placeholder'] : 'name@mail.com';
         $buttontext = ! empty( $instance['buttontext'] ) ? $instance['buttontext'] : 'Subscribe';
         $listID = ! empty( $instance['listID'] ) ? $instance['listID'] : '';
         $apiKey = ! empty( $instance['apiKey'] ) ? $instance['apiKey'] : '';
@@ -142,7 +152,8 @@ class WDV_MailChimp_Ajax extends WP_Widget {
         ?>
         <script type='text/javascript'>
 
-    ( function( $ ){
+    ( function($) {
+
 	function initColorPicker( widget ) {
                 widget.find( '#title-color-field' ).wpColorPicker( {
 				change: _.throttle( function() { // For Customizer
@@ -195,53 +206,60 @@ class WDV_MailChimp_Ajax extends WP_Widget {
 		} );
 	} );
         
-}( jQuery ) );
+
+} )( jQuery );
 
         </script>
 
         <p>
-        <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'wdv_mailchimp_ajax_widget' ); ?></label>
-        <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+        <label for="<?php echo esc_attr($this->get_field_id( 'title' )); ?>"><?php _e( 'Title:', 'wdv-mailchimp-ajax-widget' ); ?></label>
+        <input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'title' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'title' )); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
         </p>
         <p>
-        <label for="<?php echo $this->get_field_id( 'description' ); ?>"><?php _e( 'Description:', 'wdv_mailchimp_ajax_widget' ); ?></label>
-        <input class="widefat" id="<?php echo $this->get_field_id( 'description' ); ?>" name="<?php echo $this->get_field_name( 'description' ); ?>" type="text" value="<?php echo esc_attr( $description ); ?>" />
+        <label for="<?php echo esc_attr($this->get_field_id( 'description' )); ?>"><?php _e( 'Description:', 'wdv-mailchimp-ajax-widget' ); ?></label>
+        <input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'description' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'description' )); ?>" type="text" value="<?php echo esc_attr( $description ); ?>" />
+        </p>
+        
+        <p>
+        <label for="<?php echo esc_attr($this->get_field_id( 'placeholder' )); ?>"><?php _e( 'Placeholder for e-mail:', 'wdv-mailchimp-ajax-widget' ); ?></label>
+        <input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'placeholder' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'placeholder' )); ?>" type="text" value="<?php echo esc_attr( $placeholder ); ?>" />
+        </p>    
+        
+        <p>
+        <label for="<?php echo esc_attr($this->get_field_id( 'buttontext' )); ?>"><?php _e( 'Text on button:', 'wdv-mailchimp-ajax-widget' ); ?></label>
+        <input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'buttontext' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'buttontext' )); ?>" type="text" value="<?php echo esc_attr( $buttontext ); ?>" />
         </p>
         <p>
-        <label for="<?php echo $this->get_field_id( 'buttontext' ); ?>"><?php _e( 'Text on button:', 'wdv_mailchimp_ajax_widget' ); ?></label>
-        <input class="widefat" id="<?php echo $this->get_field_id( 'buttontext' ); ?>" name="<?php echo $this->get_field_name( 'buttontext' ); ?>" type="text" value="<?php echo esc_attr( $buttontext ); ?>" />
-        </p>
-        <p>
-        <label for="<?php echo $this->get_field_id( 'apiKey' ); ?>"><?php _e( 'API Key (from MailChimp):', 'wdv_mailchimp_ajax_widget' ); ?></label>
-        <input class="widefat" id="<?php echo $this->get_field_id( 'apiKey' ); ?>" name="<?php echo $this->get_field_name( 'apiKey' ); ?>" type="text" value="<?php echo esc_attr( $apiKey ); ?>" />
+        <label for="<?php echo esc_attr($this->get_field_id( 'apiKey' )); ?>"><?php _e( 'API Key (from MailChimp):', 'wdv-mailchimp-ajax-widget' ); ?></label>
+        <input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'apiKey' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'apiKey' )); ?>" type="text" value="<?php echo esc_attr( $apiKey ); ?>" />
         </p>
         <p>                                                                  
-        <label for="<?php echo $this->get_field_id( 'listID' ); ?>"><?php _e( 'List ID (from MailChimp):', 'wdv_mailchimp_ajax_widget' ); ?></label>
-        <input class="widefat" id="<?php echo $this->get_field_id( 'listID' ); ?>" name="<?php echo $this->get_field_name( 'listID' ); ?>" type="text" value="<?php echo esc_attr( $listID ); ?>" />
+        <label for="<?php echo esc_attr($this->get_field_id( 'listID' )); ?>"><?php _e( 'List ID (from MailChimp):', 'wdv-mailchimp-ajax-widget' ); ?></label>
+        <input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'listID' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'listID' )); ?>" type="text" value="<?php echo esc_attr( $listID ); ?>" />
         </p> 
         <p>
-        <label for="<?php echo $this->get_field_id('titletextcolor'); ?>"><?php _e('Change the color of the title:', 'wdv_mailchimp_ajax_widget'); ?></label><br> 
-        <input id="title-color-field" id="<?php echo $this->get_field_id('titletextcolor'); ?>" name="<?php echo $this->get_field_name('titletextcolor'); ?>" type="text" value="<?php if($titletextcolor) { echo $titletextcolor; }  ?>" />    
+        <label for="<?php echo esc_attr($this->get_field_id('titletextcolor')); ?>"><?php _e('Change the color of the title:', 'wdv-mailchimp-ajax-widget'); ?></label><br> 
+        <input id="title-color-field" id="<?php echo esc_attr($this->get_field_id('titletextcolor')); ?>" name="<?php echo esc_attr($this->get_field_name('titletextcolor')); ?>" type="text" value="<?php if($titletextcolor) { echo esc_attr($titletextcolor); }  ?>" />    
         </p>
         <p>
-        <label for="<?php echo $this->get_field_id('descriptiontextcolor'); ?>"><?php _e('Change the color of the description:', 'wdv_mailchimp_ajax_widget'); ?></label><br> 
-        <input id="description-color-field" id="<?php echo $this->get_field_id('descriptiontextcolor'); ?>" name="<?php echo $this->get_field_name('descriptiontextcolor'); ?>" type="text" value="<?php if($descriptiontextcolor) { echo $descriptiontextcolor; } ?>" />    
+        <label for="<?php echo esc_attr($this->get_field_id('descriptiontextcolor')); ?>"><?php _e('Change the color of the description:', 'wdv-mailchimp-ajax-widget'); ?></label><br> 
+        <input id="description-color-field" id="<?php echo esc_attr($this->get_field_id('descriptiontextcolor')); ?>" name="<?php echo esc_attr($this->get_field_name('descriptiontextcolor')); ?>" type="text" value="<?php if($descriptiontextcolor) { echo esc_attr($descriptiontextcolor); } ?>" />    
         </p>        
         <p>
-        <label for="<?php echo $this->get_field_id('buttonbgcolor'); ?>"><?php _e('Change the color for the button background:', 'wdv_mailchimp_ajax_widget'); ?></label><br> 
-        <input id="color-field" id="<?php echo $this->get_field_id('buttonbgcolor'); ?>" name="<?php echo $this->get_field_name('buttonbgcolor'); ?>" type="text" value="<?php if($buttonbgcolor) { echo $buttonbgcolor; } ?>" />    
+        <label for="<?php echo esc_attr($this->get_field_id('buttonbgcolor')); ?>"><?php _e('Change the color for the button background:', 'wdv-mailchimp-ajax-widget'); ?></label><br> 
+        <input id="color-field" id="<?php echo esc_attr($this->get_field_id('buttonbgcolor')); ?>" name="<?php echo esc_attr($this->get_field_name('buttonbgcolor')); ?>" type="text" value="<?php if($buttonbgcolor) { echo esc_attr($buttonbgcolor); } ?>" />    
         </p>
         <p>
-        <label for="<?php echo $this->get_field_id('buttontextcolor'); ?>"><?php _e("Change the color for the text on the button:", 'wdv_mailchimp_ajax_widget'); ?></label><br> 
-        <input id="btn-txt-color" id="<?php echo $this->get_field_id('buttontextcolor'); ?>" name="<?php echo $this->get_field_name('buttontextcolor'); ?>" type="text" value="<?php if($buttontextcolor) { echo $buttontextcolor; }?>" />    
+        <label for="<?php echo esc_attr($this->get_field_id('buttontextcolor')); ?>"><?php _e("Change the color for the text on the button:", 'wdv-mailchimp-ajax-widget'); ?></label><br> 
+        <input id="btn-txt-color" id="<?php echo esc_attr($this->get_field_id('buttontextcolor')); ?>" name="<?php echo esc_attr($this->get_field_name('buttontextcolor')); ?>" type="text" value="<?php if($buttontextcolor) { echo esc_attr($buttontextcolor); }?>" />    
         </p>
         <p>
-        <label for="<?php echo $this->get_field_id('bgcolor'); ?>"><?php _e('Change the color of the widget background:', 'wdv_mailchimp_ajax_widget'); ?></label><br> 
-        <input id="color-bg" id="<?php echo $this->get_field_id('bgcolor'); ?>" name="<?php echo $this->get_field_name('bgcolor'); ?>" type="text" value="<?php if($bgcolor) { echo $bgcolor; } ?>" />    
+        <label for="<?php echo esc_attr($this->get_field_id('bgcolor')); ?>"><?php _e('Change the color of the widget background:', 'wdv-mailchimp-ajax-widget'); ?></label><br> 
+        <input id="color-bg" id="<?php echo esc_attr($this->get_field_id('bgcolor')); ?>" name="<?php echo esc_attr($this->get_field_name('bgcolor')); ?>" type="text" value="<?php if($bgcolor) { echo esc_attr($bgcolor); } ?>" />    
         </p> 
         <p>
-        <label for="<?php echo $this->get_field_id( 'padding' ); ?>"><?php _e( 'Create padding around the widget (in pixels):', 'wdv_mailchimp_ajax_widget' ); ?></label>
-        <input class="widefat" id="<?php echo $this->get_field_id( 'padding' ); ?>" name="<?php echo $this->get_field_name( 'padding' ); ?>" type="text" value="<?php echo esc_attr( $padding ); ?>" />
+        <label for="<?php echo esc_attr($this->get_field_id( 'padding' )); ?>"><?php _e( 'Create padding around the widget (in pixels):', 'wdv-mailchimp-ajax-widget' ); ?></label>
+        <input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'padding' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'padding' )); ?>" type="text" value="<?php echo esc_attr( $padding ); ?>" />
         </p>
 
         <?php
@@ -269,6 +287,7 @@ class WDV_MailChimp_Ajax extends WP_Widget {
         $instance['padding'] = ( ! empty( $new_instance['padding'] ) ) ? strip_tags( $new_instance['padding'] ) : '';            
         $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
         $instance['description'] = ( ! empty( $new_instance['description'] ) ) ? strip_tags( $new_instance['description'] ) : '';        
+        $instance['placeholder'] = ( ! empty( $new_instance['placeholder'] ) ) ? strip_tags( $new_instance['placeholder'] ) : '';        
         $instance['listID'] = ( ! empty( $new_instance['listID'] ) ) ? strip_tags( $new_instance['listID'] ) : '';
         $instance['apiKey'] = ( ! empty( $new_instance['apiKey'] ) ) ? strip_tags( $new_instance['apiKey'] ) : '';            
         return $instance;

@@ -3,7 +3,7 @@
 /*
 Plugin Name: WDV MailChimp Ajax
 Description: Contact form for MailChimp using ajax
-Version: 1.0
+Version: 1.0.3
 Author: wdvillage
 Author URI: http://wdvillage.com/
 Plugin URI: http://wdvillage.com/wdv-mailchimp-ajax/
@@ -119,11 +119,11 @@ function wdv_mailchimp_ajaxcall() {
     echo '</div><!-- /post-error -->';
  
     }
-        elseif ($response[response][code]===200) {
+        elseif ($response["response"]["code"]===200) {
             echo '<div class="post-success">';
             echo __( 'You have been added to our sign-up list.', 'wdv_mailchimp_widget' );
             echo '</div><!-- /post-success -->';
-        } elseif ($response[response][code]===400) {
+        } elseif ($response["response"]["code"]===400) {
                 echo '<div class="post-success">';
                 echo __( 'You have already subscribed to our sign-up list.', 'wdv_mailchimp_widget' );
                 echo '</div><!-- /post-success -->';
