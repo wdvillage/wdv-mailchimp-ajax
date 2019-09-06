@@ -1,9 +1,9 @@
 === WDV MailChimp Ajax ===
-Contributors: wdvillage(wdvillage100@gmail.com)
-Donate link: 
-Tags: mailchimp, newsletter, form, subscribe, sign up, 
+Contributors: vrpr(wdvillage100@gmail.com)
+Donate link: https://wdvillage.com/product/wdv-mailchimp-ajax-wp-plugin/
+Tags: mailchimp, newsletter, form, subscribe, sign up, widget
 Requires at least: 4.5.3
-Tested up to: 5.2.2
+Tested up to: 5.2.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

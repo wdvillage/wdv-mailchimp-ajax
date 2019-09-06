@@ -6,7 +6,7 @@ Description: Contact form for MailChimp using ajax
 Version: 1.0.4
 Author: wdvillage
 Author URI: http://wdvillage.com/
-Plugin URI: http://wdvillage.com/wdv-mailchimp-ajax/
+Plugin URI: https://wdvillage.com/product/wdv-mailchimp-ajax-wp-plugin/
 */
 /*  Copyright 2016  wdvillage  (email : wdvillage100 {at} gmail.com)
 
