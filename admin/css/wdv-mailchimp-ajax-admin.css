@@ -1,0 +1,47 @@
+/**
+ * Upload image (css)
+ */
+
+.wdv-image-container {
+   display: inline-block; 
+   width: 98%;  
+} 
+
+.wdv-media-inner {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
+.wdv-media-inner img {
+    max-width:240px;
+}
+.wdv-media-url {
+   width: 98%;
+   margin: 1em 0; 
+   display: none; 
+}
+
+.wdv-media-url-adv {
+    width: 98%; 
+    display: block; 
+}
+
+.wdv-media-upload {
+    float: right; 
+}
+
+.wdv-empty {clear:both;}
+
+/*CSS for errors*/
+#email-error {
+    color: red;
+}
+.widget_wdv_mailchimp_ajax .error {
+    border: 0px solid red!important;
+    color: red;
+}
+.error {
+    color: red;
+}
