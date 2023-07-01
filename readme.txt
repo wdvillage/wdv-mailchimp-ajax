@@ -3,7 +3,7 @@ Contributors: vrpr
 Donate link: http://wdvillage.com/product/wdv-mailchimp-ajax-wp-plugin/
 Tags: mailchimp, newsletter, subscribe, form, sign up, widget, marketing, email, mailchimp forms, sign/up form
 Requires at least: 5.0.0
-Tested up to: 5.8
+Tested up to: 6.2
 Stable tag: trunk
 Requires PHP: 5.7
 License: GPLv2 or later

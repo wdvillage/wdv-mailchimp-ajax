@@ -16,7 +16,7 @@
  * Plugin Name:       WDV MailChimp Ajax
  * Plugin URI:        https://wdvillage.com/product/wdv-mailchimp-ajax-wp-plugin/
  * Description:       This plugin adding widget with contact form for MailChimp using ajax
- * Version:           2.0.7
+ * Version:           2.0.8
  * Author:            wdvillage
  * Author URI:        http://wdvillage.com/
  * License:           GPL-2.0+

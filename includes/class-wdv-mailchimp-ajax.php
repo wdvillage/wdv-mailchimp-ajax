@@ -162,8 +162,8 @@ class Wdv_Mailchimp_Ajax {
 
                                 
                 // creating Ajax call for WordPress
-                $this->loader->add_action( 'wp_ajax_nopriv_wdv_mailchimp_ajaxcall', $plugin_admin, 'wdv_mailchimp_ajaxcall' );
-                $this->loader->add_action( 'wp_ajax_wdv_mailchimp_ajaxcall', $plugin_admin, 'wdv_mailchimp_ajaxcall' ); 
+                $this->loader->add_action( 'wp_ajax_wp_ajax_nopriv_wdv_mailchimp_ajaxcall', $plugin_admin, 'wp_ajax_wdv_mailchimp_ajaxcall' );
+                $this->loader->add_action( 'wp_ajax_wp_ajax_wdv_mailchimp_ajaxcall', $plugin_admin, 'wp_ajax_wdv_mailchimp_ajaxcall' ); 
                 //$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'wdv_mailchimp_ajaxcall' ); 
                                            
                 //Widgets
